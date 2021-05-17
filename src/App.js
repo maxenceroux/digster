@@ -1,23 +1,49 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from "react";
+import { getTokenFromUrl } from "./spotify";
+import SpotifyWebApi from 'spotify-web-api-js';
+
+import Profile from "./Profile";
+import Login from "./Login";
+
+const spotifyApi = new SpotifyWebApi();
 
 function App() {
+  const [profile, setProfile] = useState();
+  const [token, setToken] = useState();
+  const [albums, setAlbums] = useState();
+
+
+
+
+  useEffect(() => {
+    const hash = getTokenFromUrl();
+    window.location.hash = "";
+    const _token = hash.access_token;
+    console.log(_token);
+
+    if (_token) {
+      setToken(_token);
+      spotifyApi.setAccessToken(_token);
+
+    }
+    spotifyApi.getMe().then((value) => {
+      setProfile(value);
+    });
+    spotifyApi.getMySavedAlbums().then((value) => {
+      setAlbums(value.items);
+    });
+
+  }, []);
+
+  console.log(token);
+  console.log(albums)
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Digster</h1>
+      {profile ? <h1><Profile profile={profile} /> </h1> :
+        <Login />}
+      <div className="albums"></div>
     </div>
   );
 }
