@@ -39,9 +39,6 @@ function App() {
   const [profile, setProfile] = useState();
   const [token, setToken] = useState();
   const [albums, setAlbums] = useState();
-  const [postList, setPostList] = useState({
-    list: [1, 2, 3, 4]
-  });
   const [page, setPage] = useState(1);
   const loader = useRef(null);
 
@@ -59,13 +56,18 @@ function App() {
     }
 
   }, []);
-
   useEffect(() => {
     // here we simulate adding new posts to List
-    const newList = postList.list.concat([page, 1, 1, 1]);
-    setPostList({
-      list: newList
-    })
+    spotifyApi.getMySavedAlbums({ "offset": page * 20 }).then((value) => {
+      const b = value.items.map(track => {
+        return [{
+          album: track.album
+        }]
+      })
+      setAlbums(prevAlbums => {
+        return [...new Set([...prevAlbums, ...value.items])]
+      })
+    });
   }, [page])
 
   // here we handle what happens when user scrolls to Load More div
@@ -92,15 +94,12 @@ function App() {
       setProfile(value);
     });
     spotifyApi.getMySavedAlbums().then((value) => {
+
       setAlbums(value.items);
     });
 
   }, []);
 
-  console.log(token);
-
-  console.log(albums);
-  console.log(postList);
   return (
     <div className="App">
       <h1>Digster</h1>
@@ -117,21 +116,6 @@ function App() {
         <div className="loading" ref={loader}>
           <h2>Load More</h2>
         </div>
-
-        {/* <div className="post-list">
-          {
-            postList.list.map((post, index) => {
-              return (<div key={index}
-                className="post"
-                style={divStyle}>
-                <h2> {post} </h2>
-              </div>)
-            })
-          }
-          <div className="loading" ref={loader}>
-            <h2>Load More</h2>
-          </div>
-        </div> */}
       </div>
     </div>
 
