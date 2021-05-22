@@ -23,16 +23,6 @@ const containerStyle = {
   margin: '0 auto',
 }
 
-const albumss = {
-  1: {
-    id: 1,
-    name: 'ABC'
-  },
-  3: {
-    id: 3,
-    name: 'DEF'
-  }
-}
 
 
 function App() {
