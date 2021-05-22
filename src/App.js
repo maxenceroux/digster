@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { getTokenFromUrl } from "./spotify";
 import SpotifyWebApi from 'spotify-web-api-js';
 
+import Albums from "./Albums";
 import Profile from "./Profile";
 import Login from "./Login";
 
@@ -41,6 +42,7 @@ function App() {
         return [...new Set([...prevAlbums, ...value.items])]
       })
     });
+    console.log(albums);
   }, [page])
 
   // here we handle what happens when user scrolls to Load More div
@@ -78,12 +80,7 @@ function App() {
       <h1>Digster</h1>
       {profile ? <h1><Profile profile={profile} /> </h1> :
         <Login />}
-      {albums ? <div>
-        {Object.keys(albums).map((value, index) => {
-          return <p> {albums[value]["album"]["name"]}</p>
-        })
-        }
-      </div> : <div />
+      {albums ? <Albums albums={albums} /> : <div />
       }
       <div className="loading" ref={loader}>
         <h2>Load More</h2>
