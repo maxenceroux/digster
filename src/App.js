@@ -8,23 +8,6 @@ import Login from "./Login";
 
 const spotifyApi = new SpotifyWebApi();
 
-// styling post container
-const divStyle = {
-  color: 'blue',
-  height: '250px',
-  textAlign: 'center',
-  padding: '5px 10px',
-  background: '#eee',
-  marginTop: '15px'
-};
-
-const containerStyle = {
-  maxWidth: '1280px',
-  margin: '0 auto',
-}
-
-
-
 function App() {
   const [profile, setProfile] = useState();
   const [token, setToken] = useState();
@@ -102,10 +85,8 @@ function App() {
         }
       </div> : <div />
       }
-      <div className="container" style={containerStyle}>
-        <div className="loading" ref={loader}>
-          <h2>Load More</h2>
-        </div>
+      <div className="loading" ref={loader}>
+        <h2>Load More</h2>
       </div>
     </div>
 
